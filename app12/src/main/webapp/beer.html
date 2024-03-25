@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>Page Title</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body>
+	<form id="searchForm">
+		<label>검색하기 <input id="searchInput" type="number"></label> <input
+			type="submit" value="검색">
+	</form>
+	<p id="message"></p>
+	<hr>
+	<div id="container"></div>
+</body>
+<script>
+        const container = document.getElementById("container");
+        const apiURL = "http://localhost:8080/api/beer";
+        const search = document.getElementById("searchForm");
+        const message = document.getElementById("message");
+        //search.addEventListener("submit", function (e) {
+          //  e.preventDefault();
+
+        // 비동기 요청 api: fetch를 사용하여 서버에 GET방식의 요청을 보냅니다.
+        // Promise 객체를 반환합니다.
+        fetch(apiURL)
+            .then((resp) => resp.json())
+            .then((data) => {
+                console.log(data);
+
+                data.items.forEach((element) => {
+                    let p = document.createElement("p");
+                    p.innerText = `${element.name} : ${element.price}`;
+                    let btn = document.createElement("button");
+                    btn.innerText = "Delete";
+                    btn.dataset.id = element.id;
+                    btn.addEventListener("click", deleteBeer);
+                    p.appendChild(btn);
+                    container.appendChild(p);
+                });
+            });
+           
+        
+        function deleteBeer(e) {
+            let btn = e.target;
+            let id = btn.dataset.id;
+
+            fetch("http://localhost:8080/api/beer/" + id, {
+                method: "DELETE",
+            }).then((resp) => {
+                if (resp.status == 204) {
+                    btn.parentElement.remove();
+                }
+            });
+        }
+    </script>
+</html>

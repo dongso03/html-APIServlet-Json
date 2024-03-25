@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>사람 목록</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <style>
+            html:has(dialog[open]){
+                overflow:hidden;
+            }
+            dialog::backdrop{
+                background-color: rgba(0, 0, 0 , 0.7);
+            }
+        </style>
+    </head>
+    <body>
+        <div id="container"></div>
+        <button id="btn">다이얼로그 열기</button>
+        <dialog id="formDiv"></dialog>
+    </body>
+    <script>
+        const container = document.getElementById("container");
+        const btn = document.getElementById("btn");
+        const formDiv = document.getElementById("formDiv");
+
+        btn.addEventListener("click", showDialog);
+
+        function showDialog(e) {
+            formDiv.showModal();
+        }
+
+        fetch("http://localhost:8080/api/person")
+            .then(resp => resp.json())
+            .then(data => {
+                data.forEach(element => {
+                    let p = document.createElement("p");
+                    p.innerText = `${element.name} : ${element.age}`;
+                    container.appendChild(p);
+                });
+            });
+
+        fetch("http://localhost:5500/componentPersonForm.html")
+            .then(resp => resp.text())
+            .then(inner => {
+                formDiv.innerHTML = inner;
+            }).then(() => {
+                fetch("http://localhost:5500/personForm.js")
+                    .then(resp => resp.text())
+                    .then(inner => {
+                        let newScript = document.createElement("script");
+                        newScript.textContent = inner;
+                        document.body.appendChild(newScript);
+                    })
+            })
+    </script>
+</html>

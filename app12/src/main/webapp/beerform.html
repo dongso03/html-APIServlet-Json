@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Page Title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+    </head>
+    <body>
+        <form id="beerform">
+            <input type="text" name="name" />
+            <input type="number" name="price" />
+            <input type="submit" />
+        </form>
+        <p id="message"></p>
+    </body>
+    <script>
+        const beerform = document.getElementById("beerform");
+        const message = document.getElementById("message");
+        beerform.addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            let formdata = new FormData(beerform);
+            let obj = Object.fromEntries(formdata);
+            let json = JSON.stringify(obj);
+
+            fetch("http://localhost:8080/api/beer", {
+                method: "POST",
+                body: json
+            }).then(resp => {
+                if (resp.status == 201) {
+                    message.innerText = "등록되었습니다.";
+                    beerform.reset();
+                }
+            });
+        });
+    </script>
+</html>

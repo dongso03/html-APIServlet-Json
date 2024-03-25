@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" version="4.0">
+  <display-name>app12</display-name>
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  
+  <listener>
+  	<listener-class>app12.listener.MyWebContextListener</listener-class>
+  </listener>
+  
+  <error-page>
+  	<exception-type>com.fasterxml.jackson.core.JsonProcessingException</exception-type>
+  	<location>/myerrorpage</location>
+  </error-page>
+  
+  <error-page>
+  	<exception-type>app12.person.PersonAPIException</exception-type>
+  	<location>/personerror</location>
+  </error-page>
+  
+</web-app>
